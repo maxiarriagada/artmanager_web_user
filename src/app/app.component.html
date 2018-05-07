@@ -1,0 +1,33 @@
+﻿<!-- main app container -->
+<!--<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>-->
+<mat-toolbar color="primary">
+    <button  mat-icon-button [matMenuTriggerFor]="menu" align="end" ><span class=" glyphicon glyphicon-menu-hamburger"></span>
+       
+    </button>
+    <!--<login (onLogin)="updateUser($event);"></login>-->
+    <!--<mat-icon class="example-icon">verified_user</mat-icon>-->
+    <mat-menu #menu="matMenu">
+
+        <button  mat-menu-item (click)="logout();">Cerrar Sessión</button>
+        
+    </mat-menu>
+</mat-toolbar>
+
+<div class="jumbotron">
+    <div class="container">
+        <div class="col-sm-8 col-sm-offset-2">
+            <!--<alert></alert>-->
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
+
+<!-- credits -->
+<div class="text-center">
+   <p>
+        <a target="_top">Art Manager</a>
+    </p>
+    <p>
+        <a href="http://sudacasoft.com" target="_top">SudacaSoft.com</a>
+    </p>
+</div>

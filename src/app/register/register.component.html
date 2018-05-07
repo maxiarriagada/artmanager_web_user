@@ -1,0 +1,105 @@
+﻿<div class="col-md-12" style="height: 100%;overflow-y: hidden" ng-if="model.role!=null">
+    <h2>
+        <b>Preventor</b>
+    </h2>
+    <form *ngIf="userSession!=null && userSession.role == 'crud'" name="form" (ngSubmit)="f.form.valid && openSaveDialog()" #f="ngForm" novalidate>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
+
+                    <label for="username">Nombre Usuario</label>
+                
+                        <input  pattern="[@a-zA-Z0-9._-]*" type="text" class="form-control text-lowercase" name="username" [(ngModel)]="model.username"
+                            #username="ngModel" required (keyup)="usernameTrim($event)"  style="background-color: white"/>
+                    
+                    <div *ngIf="f.submitted && !username.valid" class="help-block">*Obligatorio caracteres permitidos a-z 0-9 _ @ .- </div>
+
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div ng-if="role.value==preventor" class="form-group" [ngClass]="{ 'has-error': f.submitted && !preventorname.valid }">
+                    <label for="preventorname">Nombre Preventor</label>
+                    <input pattern="[@a-zA-Z0-9._-]*" type="text" class="form-control text-lowercase" name="preventorname" [(ngModel)]="model.preventorname"
+                        #preventorname="ngModel" required (keyup)="preventornameTrim($event)"/>
+                    <div *ngIf="f.submitted && !preventorname.valid" class="help-block">*Obligatorio caracteres permitidos a-z 0-9 _ @ .-</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+                    <label for="password">Contraseña</label>
+                    <input type="password" class="form-control" name="password" [(ngModel)]="model.password" #password="ngModel" required (keyup)="passwordTrim($event)"
+                    />
+                    <div *ngIf="f.submitted && !password.valid" class="help-block">*Obligatorio</div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group" [ngClass]="{ 'has-error': f.submitted && !confirmpassword.valid }">
+                    <label for="confirmpassword">Confirmar Contraseña</label>
+                    <input type="password" class="form-control" name="confirmpassword" [(ngModel)]="model.confirmpassword" #confirmpassword="ngModel"
+                        required (keyup)="passwordTrim($event)" />
+                    <div *ngIf="f.submitted && !confirmpassword.valid" class="help-block">*Obligatorio</div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+           
+            <div class="col-md-12">
+                <div class="form-group" style="float:right;">
+                    <button [disabled]="loading" class="btn btn-primary">Guardar</button>
+                    <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+                    />
+                    <!--<button [routerLink]="['/register']" class="btn btn-link">Cancelar</button>-->
+                    <button (click)="f.form.reset();f.resetForm();getAllPreventors();" class="btn btn-link">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="example-container mat-elevation-z8">
+
+        <div class="example-header">
+           <mat-form-field>
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar Usuario">
+                <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+                />
+            </mat-form-field>
+        </div>
+
+        <mat-table #table [dataSource]="dataSource" class="table-bordered table-striped">
+
+            <!--- Note that these columns can be defined in any order.
+          The actual rendered columns are set as a property on the row definition" -->
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="col_username">
+                <mat-header-cell *matHeaderCellDef> Nombre Usuario </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.username}} </mat-cell>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="col_preventorname">
+                <mat-header-cell *matHeaderCellDef> Nombre Preventor </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.preventorname}} </mat-cell>
+            </ng-container>
+
+         
+
+        <ng-container matColumnDef="options">
+            <mat-header-cell *matHeaderCellDef>  </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <button (click)="openDeleteDialog(element)" class="btn btn-danger glyphicon glyphicon-trash"></button>
+                <button (click)="selectUser(element)" class="btn btn-warning glyphicon glyphicon-edit"></button>
+            </mat-cell>
+        </ng-container>
+
+
+
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+    </div>
+
+ 
+</div>

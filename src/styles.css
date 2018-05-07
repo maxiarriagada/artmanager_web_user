@@ -1,0 +1,19 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+
+.snackbar-success {
+  background:#97e276;
+ font-weight: bold;
+}
+.snackbar-danger {
+  background:#e68181;
+  font-weight: bold;
+}
+.snackbar-warning {
+  background:#ffdc2d;
+ font-weight: bold;
+}
+.snackbar-none {
+  background:grey;
+  font-weight: bold;
+}
